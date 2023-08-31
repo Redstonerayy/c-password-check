@@ -1,6 +1,6 @@
 # ------------ project setup ------------ #
 project(cpasswordcheck)
-set(CMAKE_C_FLAGS "-O3")
+set(CMAKE_C_FLAGS "-O3 -march=native")
 
 
 # ------------ main executable ------------ #

@@ -18,7 +18,6 @@ size_t get_user_input(char **line_p)
 /*------------ longer than 8, one upper, lower, special, numeric character ------------*/
 int check_password(char *line_p, size_t password_len)
 {
-    // short checks[] = {0, 0, 0, 0}; // upper, lower, special, numeric
     unsigned char checks = 0b00000000;
 
     /*------------ uppper lower ------------*/
