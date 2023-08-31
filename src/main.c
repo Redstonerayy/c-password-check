@@ -16,12 +16,10 @@ size_t get_user_input(char **line_p)
 }
 
 /*------------ longer than 8, one upper, lower, special, numeric character ------------*/
-// upper, lower, special
-const int ascii_ranges[] = {};
-
 int check_password(char *line_p, size_t password_len)
 {
-    short checks[] = {0, 0, 0, 0}; // upper, lower, special, numeric
+    // short checks[] = {0, 0, 0, 0}; // upper, lower, special, numeric
+    unsigned char checks = 0b00000000;
 
     /*------------ uppper lower ------------*/
     for (int i = 0; i < password_len; ++i)
@@ -29,22 +27,12 @@ int check_password(char *line_p, size_t password_len)
         if (isalpha(line_p[i]) != 0)
         {
             if (isupper(line_p[i]) != 0)
-                checks[0] = 1;
+                checks |= 0b00000001;
             else
-                checks[1] = 1;
+                checks |= 0b00000010;
 
-            if (checks[0] + checks[1] == 2)
+            if (checks & 0b00000011)
                 break;
-        }
-    }
-
-    /*------------ numeric ------------*/
-    for (int i = 0; i < password_len; ++i)
-    {
-        if (isdigit(line_p[i]) != 0)
-        {
-            checks[3] = 1;
-            break;
         }
     }
 
@@ -54,12 +42,22 @@ int check_password(char *line_p, size_t password_len)
         char c = line_p[i];
         if ((c >= 33 && c <= 47) || (c >= 58 && c <= 64) || (c >= 91 && c <= 96) || (c >= 123 && c <= 126))
         {
-            checks[2] = 1;
+            checks |= 0b00000100;
             break;
         }
     }
 
-    return (checks[0] + checks[1] + checks[2] + checks[3]) == 4;
+    /*------------ numeric ------------*/
+    for (int i = 0; i < password_len; ++i)
+    {
+        if (isdigit(line_p[i]) != 0)
+        {
+            checks |= 0b00001000;
+            break;
+        }
+    }
+
+    return checks == 15;
 }
 
 int main()
